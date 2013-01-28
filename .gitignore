@@ -1,0 +1,5 @@
+# cabal-install's build directory
+dist
+
+# backup files
+*~
