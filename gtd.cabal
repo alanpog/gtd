@@ -27,6 +27,9 @@ executable gtd
   hs-source-dirs   : src
   build-depends    :
     base
---  other-modules    :
---    GTD.CLParser,
---    GTD.Configuration
+  other-modules    :
+    GTD.Actions,
+    GTD.CLParser,
+    GTD.CLParser.Primitives,
+    GTD.Configuration,
+    GTD.Tasks
