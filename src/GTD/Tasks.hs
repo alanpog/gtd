@@ -11,4 +11,7 @@ data Priority
       deriving (Eq, Ord, Show, Read, Bounded, Enum)
 
 -- | Type of recurring task.
-data RecurType = Relative | Absolute
+data RecurType = Relative 
+               | Absolute 
+                 deriving (Eq, Ord, Show, Read, Bounded, Enum)
+

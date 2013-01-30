@@ -25,11 +25,12 @@ source-repository head
 executable gtd
   main-is          : GTD/Main.hs
   hs-source-dirs   : src
-  build-depends    :
-    base
-  other-modules    :
-    GTD.Actions,
-    GTD.CLParser,
-    GTD.CLParser.Primitives,
-    GTD.Configuration,
-    GTD.Tasks
+  ghc-options      : -Wall
+                     -O2
+  build-depends    :  base,
+                      time >= 1.4
+  other-modules    :  GTD.Actions,
+                      GTD.CLParser,
+                      GTD.CLParser.Primitives,
+                      GTD.Configuration,
+                      GTD.Tasks

@@ -2,6 +2,11 @@ module GTD.Actions (
     CLActions(..)
   ) where
 
+import GTD.Tasks
+
+import Data.Time
+
+
 data CLActions = 
     Add {                             -- | Add a new task
       oDesc      :: String          , -- ^ Task description
