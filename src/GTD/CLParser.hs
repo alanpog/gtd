@@ -40,5 +40,14 @@ parseRecurType :: Parser RecurType
 parseRecurType = undefined
 
 
-parseSelectors :: Parser [Int]
-parseSelectors = undefined
+selector :: Parser [Int]
+selector = selectorEntry <+> iter (literal ',' <?+> selectorEntry) 
+             >>> concat . cons
+
+
+selectorEntry :: Parser [Int]
+selectorEntry = rangeSelector <|> (number >>> (:[]))
+
+
+rangeSelector :: Parser [Int]
+rangeSelector = number <+-> literal '-' <+> number >>> (\(a, b) -> [a..b])

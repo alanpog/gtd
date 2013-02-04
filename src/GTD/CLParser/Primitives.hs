@@ -1,12 +1,16 @@
 module GTD.CLParser.Primitives ( 
   Parser(..),
+
+  number, literal,
+  iter, cons,
+
+  (<|>),
   (>>>), (>>>=),
-  (<+>), (<-+>), (<+->),
+  (<+>), (<-+>), (<+->), (<?+>), (<+?>),
   (<=>)
  ) where
 
 import Control.Monad
-import Control.Monad.Instances
 import Data.Char
 
 type Parser a = String -> Maybe (String, a)
@@ -25,6 +29,7 @@ digit = char <=> isDigit >>> digitToInt
 
 number :: Parser Int
 number = digit >>>= number'
+
 
 number' :: Int -> Parser Int
 number' n = digit >>> buildNumber n >>>= number' <|> result n
@@ -113,6 +118,23 @@ infixl 6 <+->
   (cs',  a) <- m cs
   (cs'', _) <- n cs'
   return (cs'', a)
+
+
+infixl 6 <?+>
+(<?+>) :: Parser a -> Parser b -> Parser b
+(m <?+> n) cs = do
+  case m cs of
+    Nothing       -> n cs
+    Just (cs', _) -> n cs'
+
+
+infixl 6 <+?>
+(<+?>) :: Parser a -> Parser b -> Parser a
+(m <+?> n) cs = do
+  (cs',  a) <- m cs
+  case n cs' of
+    Nothing        -> return (cs',  a)
+    Just (cs'', _) -> return (cs'', a)
 
 
 infix 7 <=>
