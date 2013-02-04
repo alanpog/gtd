@@ -1,6 +1,6 @@
 module GTD.CLParser.Primitives ( 
   Parser(..),
-  (>>>),
+  (>>>), (>>>=),
   (<+>), (<-+>), (<+->),
   (<=>)
  ) where
@@ -21,6 +21,17 @@ char (c:cs) = Just (cs, c)
 -- | Parse a single decimal digit
 digit :: Parser Int
 digit = char <=> isDigit >>> digitToInt
+
+
+number :: Parser Int
+number = digit >>>= number'
+
+number' :: Int -> Parser Int
+number' n = digit >>> buildNumber n >>>= number' <|> result n
+
+
+buildNumber :: Int -> Int -> Int
+buildNumber a b = a * 10 + b
 
 
 -- | Parse a single letter
@@ -50,25 +61,29 @@ iter m = m <+> iter m >>> cons <|> result []
 
 -- | Iterate parser at least once until it fails
 iter' :: Parser a -> Parser [a]
-iter' m = m <+> iter m >>> cons <|> failed
+iter' m = m <+> iter m >>> cons <|> failure
 
 
 -- | Cause parse failure
-failed :: Parser a
-failed _ = Nothing
+failure :: Parser a
+failure _ = Nothing
 
 
 -- | Colapse a tuple into a list
 cons :: (a, [a]) -> [a]
-cons (hd, tl) = hd:tl
-
+cons (hd, tl) = hd : tl
 
 
 infixl 3 <|>
 (<|>) :: Parser a -> Parser a -> Parser a
 (m <|> n) cs = case m cs of
-    Nothing -> n cs
-    mcs     -> mcs
+   Nothing -> n cs
+   mcs     -> mcs
+
+
+infixl 4 >>>=
+(>>>=) :: Parser a -> (a -> Parser b) -> Parser b
+(m >>>= n) cs = m cs >>= uncurry (flip n)
 
 
 infixl 5 >>>

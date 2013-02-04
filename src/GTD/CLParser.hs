@@ -40,5 +40,5 @@ parseRecurType :: Parser RecurType
 parseRecurType = undefined
 
 
-parseSelectors :: Parser Int
+parseSelectors :: Parser [Int]
 parseSelectors = undefined
