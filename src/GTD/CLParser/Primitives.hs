@@ -1,11 +1,12 @@
 module GTD.CLParser.Primitives ( 
   Parser(..),
 
+  char, word,
   number, literal,
-  iter, cons,
+  iter, while, cons,
 
   (<|>),
-  (>>>), (>>>=),
+  (>>>), (?>>>), (>>>=),
   (<+>), (<-+>), (<+->), (<?+>), (<+?>),
   (<=>)
  ) where
@@ -49,9 +50,22 @@ space :: Parser Char
 space = char <=> isSpace 
 
 
+word :: Parser String
+word = iter (char <=> not . isSpace)
+
+
+while :: (Char -> Bool) -> Parser String
+while p = iter (char <=> p)
+
+
 -- | Parse a given character
 literal :: Char -> Parser Char
 literal l = char <=> (==l)
+
+
+token :: String -> Parser String
+token [] = result []
+token (c:cs) = literal c <+> token cs >>> cons
 
 
 -- | Create parse with a given result
@@ -95,6 +109,14 @@ infixl 5 >>>
 (>>>) :: Parser a -> (a -> b) -> Parser b
 (m >>> f) cs = liftM (fmap f) (m cs)
 
+
+infixl 5 ?>>>
+(?>>>) :: Parser a -> (a -> Maybe b) -> Parser b
+(m ?>>> f) cs = m cs >>= (\(cs', a) -> fmap ((,) cs') (f a))
+                      {-        case f a of
+                                Nothing -> Nothing
+                                Just b -> Just (cs', b))
+-}
 
 infixl 6 <+>
 (<+>) :: Parser a -> Parser b -> Parser (a, b)
