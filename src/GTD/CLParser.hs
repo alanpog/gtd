@@ -16,11 +16,11 @@ recurTypeKeywords =  [ ("relative", Relative )
 
 
 constructorFromKeyword :: [(String, a)] -> String -> Maybe a
-constructorFromKeyword keywords keyword = 
+constructorFromKeyword keywords keyword =
     let words = filter (((map toLower keyword) `isPrefixOf`) . fst) keywords
     in case length words of
          1 -> Just . snd . head $ words
-         _ -> Nothing 
+         _ -> Nothing
 
 
 parseCLActions :: Parser CLActions
@@ -56,7 +56,7 @@ recurType = (word ?>>>) . constructorFromKeyword $ recurTypeKeywords
 
 
 selector :: Parser [Int]
-selector = selectorEntry <+> iter (literal ',' <?+> selectorEntry) 
+selector = selectorEntry <+> iter (literal ',' <?+> selectorEntry)
              >>> concat . cons
 
 

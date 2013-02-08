@@ -1,4 +1,4 @@
-module GTD.CLParser.Primitives ( 
+module GTD.CLParser.Primitives (
   Parser(..),
 
   char, word,
@@ -47,7 +47,7 @@ letter = char <=> isLetter
 
 -- | Parse a whitespace
 space :: Parser Char
-space = char <=> isSpace 
+space = char <=> isSpace
 
 
 word :: Parser String

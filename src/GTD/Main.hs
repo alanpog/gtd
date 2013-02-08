@@ -5,4 +5,3 @@ module Main (
 
 main :: IO ()
 main = putStrLn "GTD is not implemented yet"
- 
