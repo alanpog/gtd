@@ -3,6 +3,25 @@ module GTD.Tasks (
     RecurType(..),
   ) where
 
+import Data.Time
+import Data.Function
+
+-- | Task
+data Task
+  = Task {
+      tDisplayId    :: Int
+    , tUniqueId     :: String
+    , tDescription  :: String
+    , tPriority     :: Priority
+    , tTags         :: [String]
+    , tCreationDate :: UTCTime
+    , tWaitDate     :: UTCTime
+    , tDueDate      :: UTCTime
+    } deriving (Show)
+
+instance Eq Task where
+  (==) = (==) `on` tUniqueId
+
 -- | Task priority
 data Priority
     = L -- ^ low priority
