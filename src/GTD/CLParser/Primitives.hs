@@ -112,11 +112,10 @@ infixl 5 >>>
 
 infixl 5 ?>>>
 (?>>>) :: Parser a -> (a -> Maybe b) -> Parser b
-(m ?>>> f) cs = m cs >>= (\(cs', a) -> fmap ((,) cs') (f a))
-                      {-        case f a of
-                                Nothing -> Nothing
-                                Just b -> Just (cs', b))
--}
+(m ?>>> f) cs = do
+  (cs', a) <- m cs
+  b        <- f a
+  return (cs', b)
 
 infixl 6 <+>
 (<+>) :: Parser a -> Parser b -> Parser (a, b)
