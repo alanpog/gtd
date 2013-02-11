@@ -2,25 +2,18 @@ module Main (
   main
  ) where
 
+import GTD.Assets
+import GTD.Configuration
+
+import Control.Monad (unless)
 import System.Directory
 import System.Exit
 import System.FilePath
 import System.IO.Error
 
-appName :: String
-appName = "gtd"
 
-
-configFileName :: FilePath -> FilePath
-configFileName appDir = appDir ++ [pathSeparator] ++ ".gtdrc"
-
-
-configDirErrorMessage :: String
-configDirErrorMessage = "Error when locating GTD config directory"
-
-
-configDirCreateErrorMessage :: String
-configDirCreateErrorMessage = "Error when creating GTD config directory"
+configFileFromPath :: FilePath -> FilePath
+configFileFromPath appDir = appDir ++ [pathSeparator] ++ configFileName
 
 
 handleIOErrors :: String -> IOError -> IO a
@@ -35,4 +28,10 @@ main = do
                                (handleIOErrors configDirErrorMessage)
   catchIOError (createDirectoryIfMissing True appDirectory)
                (handleIOErrors configDirCreateErrorMessage)
+
+  let configFile = configFileFromPath appDirectory
+  configExists <- doesFileExist configFile
+  unless configExists (initializeConfig configFile appDirectory)
+  config <- loadConfiguration configFile appDirectory
+
   putStrLn "GTD is not implemented yet"

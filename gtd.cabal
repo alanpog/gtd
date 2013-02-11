@@ -27,6 +27,7 @@ executable gtd
   hs-source-dirs   : src
   build-depends    :
     base,
+    ConfigFile,
     directory,
     filepath
 --  other-modules    :
