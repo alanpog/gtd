@@ -28,4 +28,4 @@ data CLActions =
       oPri       :: Maybe Priority  , -- ^ Task priority
       oTags      :: [String]          -- ^ Associated tags
     }
-  deriving (Show)
+  deriving (Show, Eq)
