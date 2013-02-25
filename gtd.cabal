@@ -34,3 +34,13 @@ executable gtd
                       GTD.CLParser.Primitives,
                       GTD.Configuration,
                       GTD.Tasks
+
+test-suite gtd-tests
+  type             : exitcode-stdio-1.0
+  hs-source-dirs   : test, src
+  main-is          : MainTestSuite.hs
+  build-depends    : base,
+                     HUnit,
+                     test-framework,
+                     test-framework-hunit
+

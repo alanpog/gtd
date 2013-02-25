@@ -1,3 +1,5 @@
+module GTD.CLParser.Tests where
+
 import GTD.Actions
 import GTD.CLParser
 import GTD.Tasks
@@ -23,6 +25,6 @@ testCases =
 testTemplate input result = TestCase $ assertEqual
   "Should parse." (Just ("", result)) (parseCLActions input)
 
-main = runTestTT $ TestList $ map toTestCase testCases
+tests = TestList $ map toTestCase testCases
   where
     toTestCase = \(input, result) -> testTemplate input result
